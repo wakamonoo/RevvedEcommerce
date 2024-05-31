@@ -1,18 +1,31 @@
 <?php
 include "../db.php";
-
+session_start();
+$s_user_id = $_SESSION['user_id'];
+if($_SESSION['user_cat'] != 'U'){
+    header("location: ../index.php");
+}
+if(isset($_GET['logout'])){
+    session_destroy();
+    header("location: ../index.php");
+    die();
+}
 if (!isset($_GET['category'])) {
     echo "No category selected.";
     exit;
 }
 
 $category = mysqli_real_escape_string($conn, $_GET['category']);
+$search_query = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+
+// Construct the WHERE clause for the search query
+$search_condition = $search_query ? "AND items.item LIKE '%$search_query%'" : '';
 
 // Query to retrieve items for the selected category
 $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
                                     FROM items
                                     LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                    WHERE items.stocks >= 0 AND items.category = '$category'
+                                    WHERE items.stocks >= 0 AND items.category = '$category' $search_condition
                                     GROUP BY items.item_id
                                     ORDER BY items.item_id DESC");
 
@@ -20,8 +33,35 @@ if (!$get_result) {
     echo "Error: " . mysqli_error($conn);
     exit;
 }
-?>
 
+// Fetch user information including user_img from the database
+$user_query = mysqli_query($conn, "SELECT user_img FROM users WHERE user_id = '$s_user_id'");
+if (!$user_query) {
+    // Handle the case where the query fails
+    echo "Error: " . mysqli_error($conn);
+    exit;
+}
+
+$user_data = mysqli_fetch_assoc($user_query);
+$user_img = $user_data['user_img'];
+
+// Set user_img in session variable
+$_SESSION['user_img'] = $user_img;
+
+
+// Query to get the number of items in the cart for the logged-in user
+$cart_count_result = mysqli_query($conn, "SELECT COUNT(*) AS cart_count FROM `order` WHERE status = 1 AND user_id = '$s_user_id'");
+$cart_count_row = mysqli_fetch_assoc($cart_count_result);
+$cart_count = $cart_count_row['cart_count'];
+
+$lowest_price_items_query = mysqli_query($conn, "SELECT * FROM items WHERE stocks >= 0 ORDER BY price ASC LIMIT 2");
+
+if (!$lowest_price_items_query) {
+    // Handle the case where the query fails
+    echo "Error: " . mysqli_error($conn);
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,7 +76,6 @@ body {
     background-color: #343a40;
     color: #ffffff;
     font-family: Arial, sans-serif;
-    padding-top: 20px;
 }
 .btn {
     display: inline-block;
@@ -254,14 +293,72 @@ body {
     background-color: darkblue !important; /* Dark blue color */
     border-color: #007bff !important; /* Matching border color */
 }
+.search-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    right: 250px;
+    top: 15px;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    padding: 0.4rem 0.8rem; /* Adjust padding */
+    border: 1px solid #ccc;
+    margin-right: 1px;
+    font-size: 14px; /* Adjust font size */
+}
+
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.4rem 1rem; /* Adjust padding */
+    cursor: pointer;
+    font-size: 14px; /* Adjust font size */
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+.item.deactivated {
+    background-color: #dc3545;
+}
+.stars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 90px;
+    position: absolute; /* or 'fixed' depending on your needs */
+    top: 0;
+    left: 0;
+    width: 100%; /* adjust as necessary */
+    height: 100%; /* adjust as necessary */
+}
+
+.stars .star {
+    color: #ffdd00; /* Gold color for stars */
+    font-size: 20px; /* Adjust star size */
+    margin: 0 1px;
+}
+
+.stars .star.filled {
+    color: #ffdd00; /* Gold color for filled stars */
+}
 
 .badge {
     color: blue;
     padding: 0; /* Remove padding */
     border-radius: 50%; /* Make it circular */
-    position: relative; /* Position relative for absolute positioning */
-    top: 12px; /* Adjust vertical positioning */
-    left: -14px; /* Adjust horizontal positioning */
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    right: 198px;
+    top: 18px;*/
     font-size: 14px; /* Adjust font size */
     line-height: 1; /* Adjust line height */
 }
@@ -322,9 +419,157 @@ body {
 .stars .star.filled {
     color: #ffdd00; /* Gold color for filled stars */
 }
+
+.dropdown {
+            position: absolute;
+    right: 20px; /* Align to the right of the page */
+    top: 5px; /* Optional: Align to the top of the page */
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-weight: bold; /* Make the text bold */
+    text-transform: uppercase; /* Convert text to all caps */
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: none; /* Remove the border */
+    padding: 0.375rem 0.75rem;
+    font-size: 1.2rem; /* Increase font size */
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    color: #fff;
+    text-decoration: none; /* Remove underline */
+}
+.dropdown:hover .dropdown-toggle {
+    color: #343a40 !important; /* Change text color on hover */
+}
+
+.dropdown-toggle {
+    color: white;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+    font-size: 1.2rem; 
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 20px; /* Align to the right of the page */
+    display: none;
+    position: absolute;
+    background-color: #212529;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 0;
+    color: #fff;
+    text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+    color: #343a40 !important;; /* Change text color on hover */
+}
+.cart {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    right: 200px;
+    top: 25px;
+}
+
+.cart img {
+    transition: filter 0.15s ease;
+}
+
+.cart img:hover {
+    filter: brightness(40%) saturate(10%) contrast(180%);
+}
+.toolbar{
+    background-color: #dc3545;
+    width: 100%;
+    margin-top: -10px;
+    height: 80px;
+}
+.home {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    left: 25px;
+    top: 5px;
+}
+
+.home img {
+    transition: filter 0.15s ease;
+}
+
+.home img:hover {
+    filter: brightness(40%) saturate(10%) contrast(180%);
+}
+.tag {
+  text-transform: uppercase; /* Transforms the text to uppercase */
+  font-size: 1rem; /* Sets the font size */
+  position: absolute;
+  display: flex;
+  flex-direction: column; /* Stack words vertically */
+  align-items: right; /* Center the words horizontally */
+  left: 180px;
+  top: 15px;
+}
+
+.tag .line {
+  display: block; /* Stacks the words vertically */
+  margin: 0; /* Removes vertical spacing between words */
+}
+
+.tag .username {
+  font-size: 2rem; /* Sets a different font size for the username */
+  font-weight: 700; /* Sets the font weight to bold */
+  font-family: 'Montserrat', sans-serif; /* Applies a different font to the username */
+  margin: 0; /* Removes vertical spacing */
+}
 </style>
 </head>
 <body>
+<div class="toolbar">
+<a href="index.php" class="home">
+        <img src="../img/logo.png" alt="Home" style="width: 150px; height: 60px;">
+    </a>
+    <h3 class="tag">Shop and Rev Up <span class="username"><?php echo $_SESSION['username']; ?></span></h3>
+    <div class="search-container">
+        <form action="" method="GET" class="search-form">
+            <input type="text" name="search" class="search-input" placeholder="Search..." value="<?php echo htmlspecialchars($search_query); ?>">
+            <input type="hidden" name="category" value="<?php echo htmlspecialchars($category); ?>">
+            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+    </div>
+    <a href="cart.php" class="cart">
+        <img src="../img/cart.png" alt="Cart Icon" style="width: 16px; height: 16px;">
+    </a>
+    <span class="badge badge-light"><?php echo $cart_count; ?></span>
+    <div class="dropdown">
+    <button class="dropdown-toggle" id="dropdownMenuButton">
+        <img src="../uploads/<?php echo $_SESSION['user_img']; ?>" alt="Pic" style="width: 30px; height: 30px; border-radius: 50%;">
+        <?php echo $_SESSION['username']; ?>
+    </button>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="information.php">Personal Information</a>
+            <a href="tracking.php">Orders Tracking</a>
+            <div class="dropdown-divider"></div>
+            <a href="?logout">Logout</a>
+        </div>
+    </div>
+</div>
+</div>
 <div class="container">
     <h2 class="text-center mb-4">Category: <?php echo htmlspecialchars($category); ?></h2>
     <div class="item-container">
@@ -357,5 +602,26 @@ body {
         <?php } ?>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var dropdownToggle = document.getElementById('dropdownMenuButton');
+    var dropdownMenu = document.getElementById('dropdownMenu');
+
+    dropdownToggle.addEventListener('click', function() {
+        if (dropdownMenu.style.display === 'block') {
+            dropdownMenu.style.display = 'none';
+        } else {
+            dropdownMenu.style.display = 'block';
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+});
+</script>
 </body>
 </html>
