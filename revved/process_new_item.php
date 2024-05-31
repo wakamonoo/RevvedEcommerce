@@ -4,11 +4,11 @@ if(isset($_POST['f_item_name'])){ // Check if form fields are set
     // Include the database connection file
     include_once "db.php";
     
-    // Retrieve form data
-    $item_name = $_POST['f_item_name'];
-    $item_price = $_POST['f_item_price'];
-    $item_stocks = $_POST['f_item_stocks']; // New field for item stocks
-    $item_category = $_POST['f_item_category']; // New field for item category
+    // Retrieve form data and escape them
+    $item_name = mysqli_real_escape_string($conn, $_POST['f_item_name']);
+    $item_price = mysqli_real_escape_string($conn, $_POST['f_item_price']);
+    $item_stocks = mysqli_real_escape_string($conn, $_POST['f_item_stocks']);
+    $item_category = mysqli_real_escape_string($conn, $_POST['f_item_category']);
     
     // File upload handling
     $target_dir = "../img/"; // Specify the directory where uploaded files will be stored
