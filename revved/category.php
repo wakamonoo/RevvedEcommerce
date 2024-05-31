@@ -352,7 +352,7 @@ body {
                     </form>
                 <?php } ?>
                 <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
-                <a href="review.php?item_id=<?php echo $row['item_id']; ?>" class="review">Check Reviews</a>
+                <a href="common_user/disp_rev.php?item_id=<?php echo $row['item_id']; ?>" class="review">Check Reviews</a>
             </div>
         <?php } ?>
     </div>
