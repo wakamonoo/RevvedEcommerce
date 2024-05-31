@@ -28,15 +28,18 @@ if(isset($_POST['f_username'])){
         if($row['user_cat'] == 'A'){
             //admin
             header("location: admin");
+            exit(); // Make sure to exit after redirection
         }
         else if($row['user_cat'] == 'U'){
             //common user
             header("location: common_user");
+            exit(); // Make sure to exit after redirection
         }
     }
     else{
-        // Redirect if username and password do not match
-        header("location: user_login.php?error=user_not_exist");
+        // Redirect with error message
+        header("location: login.php?error=user_not_exist");
+        exit(); // Make sure to exit after redirection
     }
 }
 ?>
