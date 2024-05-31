@@ -966,8 +966,8 @@ $(document).ready(function(){
                         <p>Co-Founder</p>
                         <div class="social-links">
                             <a href="https://web.facebook.com/harley.gepila"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="mailto:michael@example.com"><i class="far fa-envelope"></i></a>
+                            <a href="instagram.com/si_harle"><i class="fab fa-instagram"></i></a>
+                            <a href="mailto:gepilaharley@gmail.com"><i class="far fa-envelope"></i></a>
                         </div>
                     </div>
                 </div>
