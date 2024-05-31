@@ -397,7 +397,33 @@ body {
 }
 .item.deactivated {
     background-color: #dc3545;
+    position: relative;
 }
+
+.item.deactivated::before {
+    content: "UNAVAILABLE"; /* Text for the label */
+    color: white; /* Text color for the label */
+    padding: 4px 8px; /* Padding for the label */
+    position: absolute; /* Position the label relative to the item */
+    top: 30; /* Position at the top of the item */
+    font-family: 'Montserrat', sans-serif; /* Specify Montserrat font */
+    z-index: 1; /* Ensure the label is displayed on top */
+    text-align: center; /* Align text to the center */
+    width: calc(100% - 20px); /* Make label width equal to item width minus padding */
+    border: 2px solid white;
+    font-size: 30px;
+    text-shadow: 
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000; /* Font outline */
+    box-shadow: 
+        inset -1px -1px 0 #000,  
+        inset 1px -1px 0 #000,
+        inset -1px 1px 0 #000,
+        inset 1px 1px 0 #000; /* Border outline */
+}
+
 .stars {
     display: flex;
     justify-content: center;
