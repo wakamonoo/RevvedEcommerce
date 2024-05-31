@@ -1,18 +1,21 @@
 <?php
 include "db.php";
-
 if (!isset($_GET['category'])) {
     echo "No category selected.";
     exit;
 }
 
 $category = mysqli_real_escape_string($conn, $_GET['category']);
+$search_query = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+
+// Construct the WHERE clause for the search query
+$search_condition = $search_query ? "AND items.item LIKE '%$search_query%'" : '';
 
 // Query to retrieve items for the selected category
 $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
                                     FROM items
                                     LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                    WHERE items.stocks >= 0 AND items.category = '$category'
+                                    WHERE items.stocks >= 0 AND items.category = '$category' $search_condition
                                     GROUP BY items.item_id
                                     ORDER BY items.item_id DESC");
 
@@ -36,7 +39,6 @@ body {
     background-color: #343a40;
     color: #ffffff;
     font-family: Arial, sans-serif;
-    padding-top: 20px;
 }
 .btn {
     display: inline-block;
@@ -322,9 +324,241 @@ body {
 .stars .star.filled {
     color: #ffdd00; /* Gold color for filled stars */
 }
+.badge {
+    color: blue;
+    padding: 0; /* Remove padding */
+    border-radius: 50%; /* Make it circular */
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    right: 198px;
+    top: 18px;*/
+    font-size: 14px; /* Adjust font size */
+    line-height: 1; /* Adjust line height */
+}
+
+.search-container {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    right: 250px;
+    top: 15px;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    padding: 0.4rem 0.8rem; /* Adjust padding */
+    border: 1px solid #ccc;
+    margin-right: 1px;
+    font-size: 14px; /* Adjust font size */
+}
+
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.4rem 1rem; /* Adjust padding */
+    cursor: pointer;
+    font-size: 14px; /* Adjust font size */
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+.item.deactivated {
+    background-color: #dc3545;
+    position: relative;
+}
+
+.item.deactivated::before {
+    content: "UNAVAILABLE"; /* Text for the label */
+    color: white; /* Text color for the label */
+    padding: 4px 8px; /* Padding for the label */
+    position: absolute; /* Position the label relative to the item */
+    top: 30; /* Position at the top of the item */
+    font-family: 'Montserrat', sans-serif; /* Specify Montserrat font */
+    z-index: 1; /* Ensure the label is displayed on top */
+    text-align: center; /* Align text to the center */
+    width: calc(100% - 20px); /* Make label width equal to item width minus padding */
+    border: 2px solid white;
+    font-size: 30px;
+    text-shadow: 
+        -1px -1px 0 #000,  
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000; /* Font outline */
+    box-shadow: 
+        inset -1px -1px 0 #000,  
+        inset 1px -1px 0 #000,
+        inset -1px 1px 0 #000,
+        inset 1px 1px 0 #000; /* Border outline */
+}
+
+.stars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 90px;
+    position: absolute; /* or 'fixed' depending on your needs */
+    top: 0;
+    left: 0;
+    width: 100%; /* adjust as necessary */
+    height: 100%; /* adjust as necessary */
+}
+
+.stars .star {
+    color: #ffdd00; /* Gold color for stars */
+    font-size: 20px; /* Adjust star size */
+    margin: 0 1px;
+}
+
+.stars .star.filled {
+    color: #ffdd00; /* Gold color for filled stars */
+}
+
+.dropdown {
+            position: absolute;
+    right: 20px; /* Align to the right of the page */
+    top: 5px; /* Optional: Align to the top of the page */
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-weight: bold; /* Make the text bold */
+    text-transform: uppercase; /* Convert text to all caps */
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: none; /* Remove the border */
+    padding: 0.375rem 0.75rem;
+    font-size: 1.2rem; /* Increase font size */
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    color: #fff;
+    text-decoration: none; /* Remove underline */
+}
+.dropdown:hover .dropdown-toggle {
+    color: #343a40 !important; /* Change text color on hover */
+}
+
+.dropdown-toggle {
+    color: white;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+    font-size: 1.2rem; 
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 20px; /* Align to the right of the page */
+    display: none;
+    position: absolute;
+    background-color: #212529;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 0;
+    color: #fff;
+    text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+    color: #343a40 !important;; /* Change text color on hover */
+}
+.cart {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    right: 200px;
+    top: 25px;
+}
+
+.cart img {
+    transition: filter 0.15s ease;
+}
+
+.cart img:hover {
+    filter: brightness(40%) saturate(10%) contrast(180%);
+}
+.toolbar{
+    background-color: #dc3545;
+    width: 100%;
+    margin-top: -10px;
+    height: 80px;
+}
+.home {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    left: 25px;
+    top: 5px;
+}
+
+.home img {
+    transition: filter 0.15s ease;
+}
+
+.home img:hover {
+    filter: brightness(40%) saturate(10%) contrast(180%);
+}
+.tag {
+  text-transform: uppercase; /* Transforms the text to uppercase */
+  font-size: 1rem; /* Sets the font size */
+  position: absolute;
+  display: flex;
+  flex-direction: column; /* Stack words vertically */
+  align-items: right; /* Center the words horizontally */
+  left: 180px;
+  top: 15px;
+}
+
+.tag .line {
+  display: block; /* Stacks the words vertically */
+  margin: 0; /* Removes vertical spacing between words */
+}
+
+.tag .username {
+  font-size: 2rem; /* Sets a different font size for the username */
+  font-weight: 700; /* Sets the font weight to bold */
+  font-family: 'Montserrat', sans-serif; /* Applies a different font to the username */
+  margin: 0; /* Removes vertical spacing */
+}
 </style>
 </head>
 <body>
+<div class="toolbar">
+<a href="index.php" class="home">
+        <img src="img/logo.png" alt="Home" style="width: 150px; height: 60px;">
+    </a>
+    <h3 class="tag">Shop and Rev Up <span class="username">GUEST</span></h3>
+    <div class="search-container">
+        <form action="" method="GET" class="search-form">
+            <input type="text" name="search" class="search-input" placeholder="Search..." value="<?php echo htmlspecialchars($search_query); ?>">
+            <input type="hidden" name="category" value="<?php echo htmlspecialchars($category); ?>">
+            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+        <!-- Cart icon with count -->
+        <a href="index.php" class="cart" id="cartLink">
+            <img src="img/cart.png" alt="Cart Icon" style="width: 16px; height: 16px;">
+        </a>
+        <!-- Display cart count -->
+        <a href="login.php" class="login">LOGIN</a>
+    </div>
+</div>
 <div class="container">
     <h2 class="text-center mb-4">Category: <?php echo htmlspecialchars($category); ?></h2>
     <div class="item-container">
@@ -368,6 +602,28 @@ body {
     } else {
         // Redirect to index.php
         window.location.href = "index.php";
+    }
+});
+document.getElementById("addToCartBtn").addEventListener("click", function() {
+    // Check if user is logged in (you would need to replace this condition with your actual login check)
+    var isLoggedIn = false; // Assuming the user is not logged in
+
+    if (!isLoggedIn) {
+        // Display error message
+        alert("Please login or sign up first.");
+    } else {
+        // Redirect to index.php
+        window.location.href = "index.php";
+    }
+});
+document.getElementById("cartLink").addEventListener("click", function(event) {
+    // Check if user is logged in (you would need to replace this condition with your actual login check)
+    var isLoggedIn = false; // Assuming the user is not logged in
+
+    if (!isLoggedIn) {
+        // Display error message
+        alert("Please login or sign up first.");
+        event.preventDefault(); // Prevent the default behavior of the link
     }
 });
 </script>
