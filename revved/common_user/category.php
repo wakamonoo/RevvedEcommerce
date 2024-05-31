@@ -25,7 +25,7 @@ $search_condition = $search_query ? "AND items.item LIKE '%$search_query%'" : ''
 $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
                                     FROM items
                                     LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                    WHERE items.stocks >= 0 AND items.category = '$category' $search_condition
+                                    WHERE items.stocks > 0 AND items.category = '$category' $search_condition
                                     GROUP BY items.item_id
                                     ORDER BY items.item_id DESC");
 
@@ -339,15 +339,25 @@ body {
     width: 100%; /* adjust as necessary */
     height: 100%; /* adjust as necessary */
 }
+.review {
+    display: inline-block;
+    margin-top: 10px;
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
 
+.review:hover {
+    color: #2980b9;
+}
 .stars .star {
-    color: #ffdd00; /* Gold color for stars */
+    color: #f39c12; /* Gold color for stars */
     font-size: 20px; /* Adjust star size */
     margin: 0 1px;
 }
 
 .stars .star.filled {
-    color: #ffdd00; /* Gold color for filled stars */
+    color: #f39c12; /* Gold color for filled stars */
 }
 
 .badge {
@@ -422,28 +432,6 @@ body {
         inset 1px -1px 0 #000,
         inset -1px 1px 0 #000,
         inset 1px 1px 0 #000; /* Border outline */
-}
-
-.stars {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 90px;
-    position: absolute; /* or 'fixed' depending on your needs */
-    top: 0;
-    left: 0;
-    width: 100%; /* adjust as necessary */
-    height: 100%; /* adjust as necessary */
-}
-
-.stars .star {
-    color: #ffdd00; /* Gold color for stars */
-    font-size: 20px; /* Adjust star size */
-    margin: 0 1px;
-}
-
-.stars .star.filled {
-    color: #ffdd00; /* Gold color for filled stars */
 }
 
 .dropdown {
