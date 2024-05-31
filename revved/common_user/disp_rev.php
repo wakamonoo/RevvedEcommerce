@@ -1,13 +1,6 @@
 <?php
 include_once "../db.php";
 session_start();
-
-if ($_SESSION['user_cat'] != 'U') {
-    header("location: ../index.php");
-}
-
-$user_id = $_SESSION['user_id'];
-
 // Retrieve the item ID from the URL parameter
 if (isset($_GET['item_id'])) {
     $item_id = $_GET['item_id'];
@@ -87,9 +80,10 @@ $result_reviews = mysqli_query($conn, $sql_reviews);
             background-color: #dc3545;
             color: #ffffff;
         }
-        h1{
+
+        h1 {
             text-transform: uppercase; /* Convert text to uppercase */
-    font-family: 'Montserrat', sans-serif; /* Applies a different font to the username */
+            font-family: 'Montserrat', sans-serif; /* Applies a different font to the username */
         }
     </style>
 </head>
@@ -115,7 +109,12 @@ $result_reviews = mysqli_query($conn, $sql_reviews);
                             ?>
                         </div>
                     </h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Reviewer: <?php echo $row['uname']; ?></h6>
+                    <?php
+                    // Obfuscate the reviewer's name
+                    $reviewer_name = $row['uname'];
+                    $obfuscated_name = substr($reviewer_name, 0, 3) . str_repeat('*', strlen($reviewer_name) - 3);
+                    ?>
+                    <h6 class="card-subtitle mb-2" style="color: #fff;">Reviewer: <?php echo $obfuscated_name; ?></h6>
                     <p class="card-text">Review: <?php echo $row['review_text']; ?></p>
                     <p class="card-text">Date Added: <?php echo $row['created_at']; ?></p>
                     <p class="card-text">Order Reference Number: <?php echo $row['order_ref_number']; ?></p>
