@@ -345,10 +345,10 @@ body {
                 </div>
                 <p class="price">Price: ₱<?php echo $row['price']; ?></p>
                 <?php if ($row['item_status'] !== 'D') { ?>
-                    <form action="process_add_to_cart.php" method="get" class="input-group">
+                    <form action="index.php" method="get" class="input-group">
                         <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
                         <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
-                        <input type="submit" value="Add to Cart" class="btn btn-primary">
+                        <input type="submit" value="Add to Cart" class="btn btn-primary" id="addToCartBtn">
                     </form>
                 <?php } ?>
                 <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
@@ -357,5 +357,19 @@ body {
         <?php } ?>
     </div>
 </div>
+<script>
+    document.getElementById("addToCartBtn").addEventListener("click", function() {
+    // Check if user is logged in (you would need to replace this condition with your actual login check)
+    var isLoggedIn = false; // Assuming the user is not logged in
+
+    if (!isLoggedIn) {
+        // Display error message
+        alert("Please login or sign up first.");
+    } else {
+        // Redirect to index.php
+        window.location.href = "index.php";
+    }
+});
+</script>
 </body>
 </html>
