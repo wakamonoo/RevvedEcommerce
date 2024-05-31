@@ -15,7 +15,7 @@ $search_condition = $search_query ? "AND items.item LIKE '%$search_query%'" : ''
 $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
                                     FROM items
                                     LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                    WHERE items.stocks >= 0 AND items.category = '$category' $search_condition
+                                    WHERE items.stocks > 0 AND items.category = '$category' $search_condition
                                     GROUP BY items.item_id
                                     ORDER BY items.item_id DESC");
 
@@ -315,15 +315,6 @@ body {
     height: 100%; /* adjust as necessary */
 }
 
-.stars .star {
-    color: #ffdd00; /* Gold color for stars */
-    font-size: 20px; /* Adjust star size */
-    margin: 0 1px;
-}
-
-.stars .star.filled {
-    color: #ffdd00; /* Gold color for filled stars */
-}
 .badge {
     color: blue;
     padding: 0; /* Remove padding */
@@ -411,13 +402,13 @@ body {
 }
 
 .stars .star {
-    color: #ffdd00; /* Gold color for stars */
+    color: #f39c12; /* Gold color for stars */
     font-size: 20px; /* Adjust star size */
     margin: 0 1px;
 }
 
 .stars .star.filled {
-    color: #ffdd00; /* Gold color for filled stars */
+    color: #f39c12;; /* Gold color for filled stars */
 }
 
 .dropdown {
@@ -535,6 +526,17 @@ body {
   font-weight: 700; /* Sets the font weight to bold */
   font-family: 'Montserrat', sans-serif; /* Applies a different font to the username */
   margin: 0; /* Removes vertical spacing */
+}
+.review {
+    display: inline-block;
+    margin-top: 10px;
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.review:hover {
+    color: #2980b9;
 }
 </style>
 </head>
