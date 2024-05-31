@@ -34,7 +34,6 @@ if (!$lowest_price_items_query) {
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,19 +47,19 @@ body {
     background-color: #343a40;
     color: #ffffff;
     padding-top: 6px;
-    font-family: Arial, sans-serif; /* Uniform font */
+    font-family: Arial, sans-serif;
 }
 
 .btn {
     display: inline-block;
-    font-weight: bold; /* Make the text bold */
-    text-transform: uppercase; /* Convert text to all caps */
+    font-weight: bold;
+    text-transform: uppercase; 
     white-space: nowrap;
     vertical-align: middle;
     user-select: none;
-    border: none; /* Remove the border */
+    border: none; 
     padding: 0.375rem 0.75rem;
-    font-size: 1.2rem; /* Increase font size */
+    font-size: 1.2rem; 
     line-height: 1.5;
     border-radius: 0.25rem;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
@@ -669,7 +668,7 @@ body {
         </form>
     </div>
         <!-- Cart icon with count -->
-        <a href="cart.php" class="cart">
+        <a href="index.php" class="cart" id="cartLink">
             <img src="img/cart.png" alt="Cart Icon" style="width: 16px; height: 16px;">
         </a>
         <!-- Display cart count -->
@@ -709,35 +708,35 @@ body {
             <div class="d-flex justify-content-between align-items-center">
                 <!-- Carousel -->
                 <div class="carousel-container">
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="2000">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="img/1.jpg" class="d-block w-100" alt="..." style="height: 200px;">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="2000">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="img/1.jpg" class="d-block w-100" alt="..." style="height: 200px;">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="img/2.jpg" class="d-block w-100" alt="..." style="height: 200px;">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="img/3.jpg" class="d-block w-100" alt="..." style="height: 200px;">
+                        </div>
+                    </div>
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    </ol>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
             </div>
-            <div class="carousel-item">
-                <img src="img/2.jpg" class="d-block w-100" alt="..." style="height: 200px;">
             </div>
-            <div class="carousel-item">
-                <img src="img/3.jpg" class="d-block w-100" alt="..." style="height: 200px;">
-            </div>
-        </div>
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
-</div>
-</div>
-<hr>
+            <hr>
 <!-- Add this code inside the <body> tag, before the item container -->
 <div class="categ">shop by category</div>
 <div class="container category-section">
@@ -780,22 +779,22 @@ body {
                         <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
                         <p class="text"><?php echo htmlspecialchars($row['item']); ?></p>
                         <div class="stars">
-    <?php
-for ($i = 1; $i <= 5; $i++) {
-    if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
-        echo '<i class="fas fa-star star filled"></i>';
-    } else {
-        echo '<i class="far fa-star star"></i>';
-    }
-}
-    ?>
-</div>
+                            <?php
+                        for ($i = 1; $i <= 5; $i++) {
+                            if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
+                                echo '<i class="fas fa-star star filled"></i>';
+                            } else {
+                                echo '<i class="far fa-star star"></i>';
+                            }
+                        }
+                            ?>
+                        </div>
                         <p class="price">Price: ₱<?php echo $row['price']; ?></p>
                         <?php if ($row['item_status'] !== 'D') { ?>
-                            <form action="process_add_to_cart.php" method="get" class="input-group">
+                            <form action="index.php" method="get" class="input-group">
                                 <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
                                 <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
-                                <input type="submit" value="Add to Cart" class="btn btn-primary">
+                                <input type="submit" value="Add to Cart" class="btn btn-primary" id="addToCartBtn">
                             </form>
                         <?php } ?>
                         <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
@@ -821,6 +820,28 @@ for ($i = 1; $i <= 5; $i++) {
         // Redirect to a page where items belonging to the selected category are displayed
         window.location.href = 'category.php?category=' + encodeURIComponent(categoryName);
     });
+});
+document.getElementById("addToCartBtn").addEventListener("click", function() {
+    // Check if user is logged in (you would need to replace this condition with your actual login check)
+    var isLoggedIn = false; // Assuming the user is not logged in
+
+    if (!isLoggedIn) {
+        // Display error message
+        alert("Please login or sign up first.");
+    } else {
+        // Redirect to index.php
+        window.location.href = "index.php";
+    }
+});
+document.getElementById("cartLink").addEventListener("click", function(event) {
+    // Check if user is logged in (you would need to replace this condition with your actual login check)
+    var isLoggedIn = false; // Assuming the user is not logged in
+
+    if (!isLoggedIn) {
+        // Display error message
+        alert("Please login or sign up first.");
+        event.preventDefault(); // Prevent the default behavior of the link
+    }
 });
 </script>
 </body>
