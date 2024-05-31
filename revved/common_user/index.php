@@ -30,19 +30,19 @@ if(isset($_GET['search'])) {
     $search = mysqli_real_escape_string($conn, $_GET['search']);
     // Query to retrieve items with search filter
     $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
-                                        FROM items
-                                        LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                        WHERE items.stocks >= 0 AND items.item LIKE '%$search%'
-                                        GROUP BY items.item_id
-                                        ORDER BY items.item_id DESC");
+                                    FROM items
+                                    LEFT JOIN reviews ON items.item_id = reviews.item_id
+                                    WHERE items.stocks > 0 AND items.item LIKE '%$search%'
+                                    GROUP BY items.item_id
+                                    ORDER BY items.item_id DESC");
 } else {
     // Query to retrieve all items if no search query is provided
     $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
-                                        FROM items
-                                        LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                        WHERE items.stocks >= 0
-                                        GROUP BY items.item_id
-                                        ORDER BY items.item_id DESC");
+                                    FROM items
+                                    LEFT JOIN reviews ON items.item_id = reviews.item_id
+                                    WHERE items.stocks > 0
+                                    GROUP BY items.item_id
+                                    ORDER BY items.item_id DESC");
 }
 
 if (!$get_result) {
@@ -63,8 +63,15 @@ if (!$lowest_price_items_query) {
     echo "Error: " . mysqli_error($conn);
     exit;
 }
+$sql = "SELECT items.*, AVG(reviews.rating) AS avg_rating 
+        FROM items 
+        LEFT JOIN reviews ON items.item_id = reviews.item_id 
+        WHERE items.stocks > 0 
+        GROUP BY items.item_id 
+        HAVING AVG(reviews.rating) = 5
+        LIMIT 5";
+$buyers_choice_result = mysqli_query($conn, $sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -368,7 +375,17 @@ body {
         inset -1px 1px 0 #000,
         inset 1px 1px 0 #000; /* Border outline */
 }
+.review {
+    display: inline-block;
+    margin-top: 10px;
+    color: #3498db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
 
+.review:hover {
+    color: #2980b9;
+}
 .stars {
     display: flex;
     justify-content: center;
@@ -382,13 +399,13 @@ body {
 }
 
 .stars .star {
-    color: #ffdd00; /* Gold color for stars */
+    color: #f39c12; /* Gold color for stars */
     font-size: 20px; /* Adjust star size */
     margin: 0 1px;
 }
 
 .stars .star.filled {
-    color: #ffdd00; /* Gold color for filled stars */
+    color: #f39c12; /* Gold color for filled stars */
 }
 
 .dropdown {
@@ -635,7 +652,8 @@ body {
     box-sizing: border-box; /* Ensure padding and borders are included in the element's total width and height */
 }
 .category-card:hover {
-    transform: scale(1.05);
+    transform: translateY(-20px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .category-card-title {
@@ -855,8 +873,7 @@ body {
         </div>
             </div>
             <hr>
-            <!-- Add this code inside the <body> tag, before the item container -->
-<div class="categ">shop by category</div>
+            <div class="categ">Shop by Category</div>
 <div class="container category-section">
     <div class="category-row">
         <div class="category-col">
@@ -889,32 +906,33 @@ body {
             </div>
         </div>
     </div>
-    </div>
-    <div class="all-items">ALL ITEMS</div>
-            <div class="item-container <?php echo mysqli_num_rows($get_result) > 0 ? 'single-item' : ''; ?>">
-    <?php while ($row = mysqli_fetch_assoc($get_result)) { ?>
+</div>
+
+<div class="all-items">TOP RATED ITEMS</div>
+<div class="item-container <?php echo mysqli_num_rows($buyers_choice_result) > 0 ? 'single-item' : ''; ?>">
+    <?php while ($row = mysqli_fetch_assoc($buyers_choice_result)) { ?>
         <div class="item <?php echo $row['item_status'] === 'D' ? 'deactivated' : ''; ?>">
+            <!-- Display buyers choice items -->
             <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
             <p class="text"><?php echo htmlspecialchars($row['item']); ?></p>
             <div class="stars">
-    <?php
-for ($i = 1; $i <= 5; $i++) {
-    if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
-        echo '<i class="fas fa-star star filled"></i>';
-    } else {
-        echo '<i class="far fa-star star"></i>';
-    }
-}
-    ?>
-</div>
+                <?php
+                for ($i = 1; $i <= 5; $i++) {
+                    if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
+                        echo '<i class="fas fa-star star filled"></i>';
+                    } else {
+                        echo '<i class="far fa-star star"></i>';
+                    }
+                }
+                ?>
+            </div>
             <p class="price">Price: ₱<?php echo $row['price']; ?></p>
             <?php if ($row['item_status'] !== 'D') { ?>
                 <form action="process_add_to_cart.php" method="get" class="input-group">
-    <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
-    <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
-    <input type="submit" value="Add to Cart" class="btn btn-primary">
-</form>
-
+                    <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
+                    <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
+                    <input type="submit" value="Add to Cart" class="btn btn-primary">
+                </form>
             <?php } ?>
             <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
             <a href="disp_rev.php?item_id=<?php echo $row['item_id']; ?>" class="review">Check Reviews</a>
@@ -922,8 +940,37 @@ for ($i = 1; $i <= 5; $i++) {
     <?php } ?>
 </div>
 
+<div class="all-items">ALL ITEMS</div>
+<div class="item-container <?php echo mysqli_num_rows($get_result) > 0 ? 'single-item' : ''; ?>">
+    <?php while ($row = mysqli_fetch_assoc($get_result)) { ?>
+        <div class="item <?php echo $row['item_status'] === 'D' ? 'deactivated' : ''; ?>">
+            <!-- Display all items -->
+            <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
+            <p class="text"><?php echo htmlspecialchars($row['item']); ?></p>
+            <div class="stars">
+                <?php
+                for ($i = 1; $i <= 5; $i++) {
+                    if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
+                        echo '<i class="fas fa-star star filled"></i>';
+                    } else {
+                        echo '<i class="far fa-star star"></i>';
+                    }
+                }
+                ?>
+            </div>
+            <p class="price">Price: ₱<?php echo $row['price']; ?></p>
+            <?php if ($row['item_status'] !== 'D') { ?>
+                <form action="process_add_to_cart.php" method="get" class="input-group">
+                    <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
+                    <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
+                    <input type="submit" value="Add to Cart" class="btn btn-primary">
+                </form>
+            <?php } ?>
+            <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
+            <a href="disp_rev.php?item_id=<?php echo $row['item_id']; ?>" class="review">Check Reviews</a>
         </div>
-    </div>
+    <?php } ?>
+</div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
