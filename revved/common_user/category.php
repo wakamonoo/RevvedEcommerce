@@ -182,7 +182,8 @@ body {
 .price {
     position: absolute;
     top: 400px;
-    color: #dc3545;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .stock-info {

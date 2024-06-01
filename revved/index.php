@@ -163,7 +163,8 @@ body {
 .price {
     position: absolute;
     top: 400px;
-    color: #dc3545;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .stock-info {
@@ -664,8 +665,17 @@ body {
 }
 
 .footer {
-    position: relative;
+    position: relative; /* Position the footer fixed at the bottom */
+    left: 0; /* Position from the left edge */
+    bottom: 0; /* Position from the bottom edge */
+    width: 100%; /* Make the footer full width */
+    background-color: #212529;
+    padding: 20px; /* Add padding to the footer */
+    color: #ffffff;
+    z-index: 1000; /* Ensure the footer is above other content */
+    top: 500px;
 }
+
 
 .footer::after {
     content: "";
@@ -699,44 +709,121 @@ body {
 .review:hover {
     color: #2980b9;
 }
+.promo-container {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    width: 100%;
+    height: 500px;
+    background-color: #212529;
+    color: white;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 1px;
+}
+.item1-image {
+    position: absolute;
+    top: -30px;
+    right: 10px;
+    height: 120%;
+    width: 60%;
+    transform: translateX(0px);
+    animation: float 6s ease-out infinite;
+}
+
+@keyframes float {
+    0%{
+        transform: translateY(0px);
+    }
+    50%{
+        transform: translateY(-60px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+}
+
+.promo-text {
+    text-align: center;
+    margin-top: 140px;
+    color: #fff;
+}
+
+.promo-text h1 {
+    position: absolute;
+    margin-left: 60px;
+    margin-top: 30px;
+    font-size: 80px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+.promo-text h2 {
+    position: absolute;
+    margin-left: 60px;
+    margin-top: 110px;
+    font-size: 20px;
+    text-transform: uppercase;
+}
+.promo-text h3 {
+    position: absolute;
+    margin-left: 60px;
+    margin-top: -40px;
+    font-size: 80px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+.website-link {
+    margin-left: -580px;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.website-link i {
+    margin-right: 5px;
+}
 </style>
 </head>
 <body>
-<div class="d-flex justify-content-end mb-3">
-<div class="toolbar">
-<a href="index.php" class="home">
-        <img src="img/logo.png" alt="Home" style="width: 150px; height: 60px;">
-    </a>
-    <h3 class="tag">Shop and Rev Up <span class="username">GUEST</span></h3>
-    <div class="search-container">
-        <form action="" method="GET" class="search-form">
-            <input type="text" name="search" class="search-input" placeholder="Search...">
-            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
-        </form>
+    <div class="d-flex justify-content-end mb-3">
+        <div class="toolbar">
+            <a href="index.php" class="home">
+                <img src="img/logo.png" alt="Home" style="width: 150px; height: 60px;">
+            </a>
+            <h3 class="tag">Shop and Rev Up <span class="username">GUEST</span></h3>
+            <div class="search-container">
+                <form action="" method="GET" class="search-form">
+                    <input type="text" name="search" class="search-input" placeholder="Search...">
+                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <!-- Cart icon with count -->
+            <a href="index.php" class="cart" id="cartLink">
+                <img src="img/cart.png" alt="Cart Icon" style="width: 16px; height: 16px;">
+            </a>
+            <!-- Display cart count -->
+            <a href="login.php" class="login">LOGIN</a>
+        </div>
     </div>
-        <!-- Cart icon with count -->
-        <a href="index.php" class="cart" id="cartLink">
-            <img src="img/cart.png" alt="Cart Icon" style="width: 16px; height: 16px;">
-        </a>
-        <!-- Display cart count -->
-        <a href="login.php" class="login">LOGIN</a>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <h2 class="low">best deals</h2>
-            <div class="square-container">
-                <div class="row">
-                    <?php 
-                    $counter = 0; 
-                    while ($row = mysqli_fetch_assoc($lowest_price_items_query)) { 
-                        if ($counter < 2) {
-                            echo '<div class="col-md-6">';
-                        } else {
-                            echo '<div class="col-md-6 mt-4">';
-                        }
-                    ?>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h2 class="low">best deals</h2>
+                <div class="square-container">
+                    <div class="row">
+                        <?php 
+                        $counter = 0; 
+                        while ($row = mysqli_fetch_assoc($lowest_price_items_query)) { 
+                            if ($counter < 2) {
+                                echo '<div class="col-md-6">';
+                            } else {
+                                echo '<div class="col-md-6 mt-4">';
+                            }
+                        ?>
                         <div class="card">
                             <img src="<?php echo $row['item_img']; ?>" class="card-img-top" alt="Item Image">
                             <div class="card-body">
@@ -745,183 +832,192 @@ body {
                                 <!-- Add to Cart button or any other action -->
                             </div>
                         </div>
+                        </div>
+                        <?php 
+                            $counter++;
+                        } 
+                        ?>
                     </div>
-                    <?php 
-                        $counter++;
-                    } 
-                    ?>
                 </div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <!-- Carousel -->
-                <div class="carousel-container">
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="2000">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="img/1.jpg" class="d-block w-100" alt="..." style="height: 200px;">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="img/2.jpg" class="d-block w-100" alt="..." style="height: 200px;">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="img/3.jpg" class="d-block w-100" alt="..." style="height: 200px;">
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Carousel -->
+                    <div class="carousel-container">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="2000">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="img/1.jpg" class="d-block w-100" alt="..." style="height: 200px;">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="img/2.jpg" class="d-block w-100" alt="..." style="height: 200px;">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="img/3.jpg" class="d-block w-100" alt="..." style="height: 200px;">
+                                </div>
+                            </div>
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                            </ol>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
                         </div>
                     </div>
-                    <ol class="carousel-indicators">
-                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                    </ol>
-                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
                 </div>
-            </div>
-            </div>
-            <hr>
-<div class="categ">Shop by Category</div>
-<div class="container category-section">
-    <div class="category-row">
-        <div class="category-col">
-            <div class="category-card-container">
-                <?php 
-                // Retrieve categories from the database
-                $categories_query = mysqli_query($conn, "SELECT DISTINCT category FROM items");
-                while ($category_row = mysqli_fetch_assoc($categories_query)) { 
-                    $category_name = htmlspecialchars($category_row['category']);
-                    
-                    // Define the image path for each category (replace this with database retrieval if needed)
-                    $category_images = [
-                        'Lights and Electrical' => 'img/lights_electrical.jpg',
-                        'Performance Parts' => 'img/Performance Parts.png',
-                        'Accessories and Add-ons' => 'img/Accessories and Add-ons.png',
-                        'Frame and Body Parts' => 'img/Frame and Body Parts.jpg',
-                        'Engine and Internal Parts' => 'img/Engine and Internal Parts.jpg',
-                        // Add more categories and their corresponding images here
-                    ];
+                <hr>
+                <div class="categ">Shop by Category</div>
+                <div class="container category-section">
+                    <div class="category-row">
+                        <div class="category-col">
+                            <div class="category-card-container">
+                                <?php 
+                                // Retrieve categories from the database
+                                $categories_query = mysqli_query($conn, "SELECT DISTINCT category FROM items");
+                                while ($category_row = mysqli_fetch_assoc($categories_query)) { 
+                                    $category_name = htmlspecialchars($category_row['category']);
+                                    
+                                    // Define the image path for each category (replace this with database retrieval if needed)
+                                    $category_images = [
+                                        'Lights and Electrical' => 'img/lights_electrical.jpg',
+                                        'Performance Parts' => 'img/Performance Parts.png',
+                                        'Accessories and Add-ons' => 'img/Accessories and Add-ons.png',
+                                        'Frame and Body Parts' => 'img/Frame and Body Parts.jpg',
+                                        'Engine and Internal Parts' => 'img/Engine and Internal Parts.jpg',
+                                        // Add more categories and their corresponding images here
+                                    ];
 
-                    $category_image = isset($category_images[$category_name]) ? $category_images[$category_name] : '/img/default_category.jpg'; // Default image if category not found
-                ?>
-                <div class="category-card-col">
-                    <div class="category-card">
-                        <img src="<?php echo $category_image; ?>" alt="<?php echo $category_name; ?>">
-                        <h5 class="category-card-title"><?php echo $category_name; ?></h5>
+                                    $category_image = isset($category_images[$category_name]) ? $category_images[$category_name] : '/img/default_category.jpg'; // Default image if category not found
+                                ?>
+                                <div class="category-card-col">
+                                    <div class="category-card">
+                                        <img src="<?php echo $category_image; ?>" alt="<?php echo $category_name; ?>">
+                                        <h5 class="category-card-title"><?php echo $category_name; ?></h5>
+                                    </div>
+                                </div>
+                                <?php } ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <?php } ?>
+                <div class="all-items">TOP RATED ITEMS</div>
+                <div class="item-container <?php echo mysqli_num_rows($buyers_choice_result) > 0 ? 'single-item' : ''; ?>">
+                    <?php while ($row = mysqli_fetch_assoc($buyers_choice_result)) { ?>
+                    <div class="item <?php echo $row['item_status'] === 'D' ? 'deactivated' : ''; ?>">
+                    <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
+                        <p class="text"><?php echo htmlspecialchars($row['item']); ?></p>
+                        <div class="stars">
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
+                                    echo '<i class="fas fa-star star filled"></i>';
+                                } else {
+                                    echo '<i class="far fa-star star"></i>';
+                                }
+                            }
+                            ?>
+                        </div>
+                        <p class="price">Price: ₱<?php echo $row['price']; ?></p>
+                        <?php if ($row['item_status'] !== 'D') { ?>
+                            <form action="index.php" method="get" class="input-group">
+                                <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
+                                <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
+                                <input type="submit" value="Add to Cart" class="btn btn-primary" id="addToCartBtn">
+                            </form>
+                        <?php } ?>
+                        <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
+                        <a href="common_user/disp_rev.php?item_id=<?php echo $row['item_id']; ?>" class="review">Check Reviews</a>
+                    </div>
+                    <?php } ?>
+                </div>
+                <div class="promo-container">
+                    <img src="img/airoh.png" alt="Item Image" class="item1-image">
+                    <div class="promo-text">
+                        <h1>AVIATOR 2.3</h1>
+                        <h2>NOW AT ₱3,000.00</h2>
+                        <h3>AIROH</h3>
+                    </div>
+                    <a href="index.php" class="website-link">
+                        <i class="fas fa-globe"></i> www.revved.com
+                    </a>
+                </div>
+                <div class="all-items">ALL ITEMS</div>
+                <div class="item-container <?php echo mysqli_num_rows($get_result) > 0 ? 'single-item' : ''; ?>">
+                    <?php while ($row = mysqli_fetch_assoc($get_result)) { ?>
+                    <div class="item <?php echo $row['item_status'] === 'D' ? 'deactivated' : ''; ?>">
+                        <!-- Display all items -->
+                        <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
+                        <p class="text"><?php echo htmlspecialchars($row['item']); ?></p>
+                        <div class="stars">
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
+                                    echo '<i class="fas fa-star star filled"></i>';
+                                } else {
+                                    echo '<i class="far fa-star star"></i>';
+                                }
+                            }
+                            ?>
+                        </div>
+                        <p class="price">Price: ₱<?php echo $row['price']; ?></p>
+                        <?php if ($row['item_status'] !== 'D') { ?>
+                            <form action="index.php" method="get" class="input-group">
+                                <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
+                                <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
+                                <input type="submit" value="Add to Cart" class="btn btn-primary" id="addToCartBtn">
+                            </form>
+                        <?php } ?>
+                        <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
+                        <a href="common_user/disp_rev.php?item_id=<?php echo $row['item_id']; ?>" class="review">Check Reviews</a>
+                    </div>
+                    <?php } ?>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Attach click event to category cards
+            $('.category-card').click(function () {
+                // Get the category name
+                var categoryName = $(this).find('.category-card-title').text().trim();
 
-<div class="all-items">TOP RATED ITEMS</div>
-<div class="item-container <?php echo mysqli_num_rows($buyers_choice_result) > 0 ? 'single-item' : ''; ?>">
-    <?php while ($row = mysqli_fetch_assoc($buyers_choice_result)) { ?>
-        <div class="item <?php echo $row['item_status'] === 'D' ? 'deactivated' : ''; ?>">
-            <!-- Display buyers choice items -->
-            <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
-            <p class="text"><?php echo htmlspecialchars($row['item']); ?></p>
-            <div class="stars">
-                <?php
-                for ($i = 1; $i <= 5; $i++) {
-                    if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
-                        echo '<i class="fas fa-star star filled"></i>';
-                    } else {
-                        echo '<i class="far fa-star star"></i>';
-                    }
-                }
-                ?>
-            </div>
-            <p class="price">Price: ₱<?php echo $row['price']; ?></p>
-            <?php if ($row['item_status'] !== 'D') { ?>
-                <form action="index.php" method="get" class="input-group">
-                    <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
-                    <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
-                    <input type="submit" value="Add to Cart" class="btn btn-primary" id="addToCartBtn">
-                </form>
-            <?php } ?>
-            <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
-            <a href="common_user/disp_rev.php?item_id=<?php echo $row['item_id']; ?>" class="review">Check Reviews</a>
-        </div>
-    <?php } ?>
-</div>
+                // Redirect to a page where items belonging to the selected category are displayed
+                window.location.href = 'category.php?category=' + encodeURIComponent(categoryName);
+            });
+        });
+        document.getElementById("addToCartBtn").addEventListener("click", function () {
+            // Check if user is logged in (you would need to replace this condition with your actual login check)
+            var isLoggedIn = false; // Assuming the user is not logged in
 
-<div class="all-items">ALL ITEMS</div>
-<div class="item-container <?php echo mysqli_num_rows($get_result) > 0 ? 'single-item' : ''; ?>">
-    <?php while ($row = mysqli_fetch_assoc($get_result)) { ?>
-        <div class="item <?php echo $row['item_status'] === 'D' ? 'deactivated' : ''; ?>">
-            <!-- Display all items -->
-            <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
-            <p class="text"><?php echo htmlspecialchars($row['item']); ?></p>
-            <div class="stars">
-                <?php
-                for ($i = 1; $i <= 5; $i++) {
-                    if ($i <= $row['avg_rating']) { // Change $row['rating'] to $row['avg_rating']
-                        echo '<i class="fas fa-star star filled"></i>';
-                    } else {
-                        echo '<i class="far fa-star star"></i>';
-                    }
-                }
-                ?>
-            </div>
-            <p class="price">Price: ₱<?php echo $row['price']; ?></p>
-            <?php if ($row['item_status'] !== 'D') { ?>
-                <form action="index.php" method="get" class="input-group">
-                    <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
-                    <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
-                    <input type="submit" value="Add to Cart" class="btn btn-primary" id="addToCartBtn">
-                </form>
-            <?php } ?>
-            <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
-            <a href="common_user/disp_rev.php?item_id=<?php echo $row['item_id']; ?>" class="review">Check Reviews</a>
-        </div>
-    <?php } ?>
-</div>
-</div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Add this script at the bottom of your HTML, after including jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script>
-   $(document).ready(function(){
-    // Attach click event to category cards
-    $('.category-card').click(function(){
-        // Get the category name
-        var categoryName = $(this).find('.category-card-title').text().trim();
-        
-        // Redirect to a page where items belonging to the selected category are displayed
-        window.location.href = 'category.php?category=' + encodeURIComponent(categoryName);
-    });
-});
-document.getElementById("addToCartBtn").addEventListener("click", function() {
-    // Check if user is logged in (you would need to replace this condition with your actual login check)
-    var isLoggedIn = false; // Assuming the user is not logged in
+            if (!isLoggedIn) {
+                // Display error message
+                alert("Please login or sign up first.");
+            } else {
+                // Redirect to index.php
+                window.location.href = "index.php";
+            }
+        });
+        document.getElementById("cartLink").addEventListener("click", function (event) {
+            // Check if user is logged in (you would need to replace this condition with your actual login check)
+            var isLoggedIn = false; // Assuming the user is not logged in
 
-    if (!isLoggedIn) {
-        // Display error message
-        alert("Please login or sign up first.");
-    } else {
-        // Redirect to index.php
-        window.location.href = "index.php";
-    }
-});
-document.getElementById("cartLink").addEventListener("click", function(event) {
-    // Check if user is logged in (you would need to replace this condition with your actual login check)
-    var isLoggedIn = false; // Assuming the user is not logged in
-
-    if (!isLoggedIn) {
-        // Display error message
-        alert("Please login or sign up first.");
-        event.preventDefault(); // Prevent the default behavior of the link
-    }
-});
-</script>
+            if (!isLoggedIn) {
+                // Display error message
+                alert("Please login or sign up first.");
+                event.preventDefault(); // Prevent the default behavior of the link
+            }
+        });
+    </script>
 </body>
 <footer class="footer mt-auto py-5">
     <div class="container">
@@ -971,12 +1067,13 @@ document.getElementById("cartLink").addEventListener("click", function(event) {
                     <li>Balogo</a></li>
                 </ul>
                 <div class="sponsor-container">
-                <img src="img/flash.jpg" alt="Flash Logo" class="spon">
-                <img src="img/gcash.png" alt="GCash Logo" class="spon">
-                <img src="img/jnt.jpg" alt="J&T Logo" class="spon">
-            </div>
+                    <img src="img/flash.jpg" alt="Flash Logo" class="spon">
+                    <img src="img/gcash.png" alt="GCash Logo" class="spon">
+                    <img src="img/jnt.jpg" alt="J&T Logo" class="spon">
+                </div>
             </div>
         </div>
     </div>
 </footer>
 </html>
+

@@ -245,6 +245,7 @@ $get_result = mysqli_query($conn, $sql_get_items);
                                             <th>Image</th>
                                             <th>Item Name</th>
                                             <th>Price</th>
+                                            <th>Stocks</th> <!-- Add Stocks column -->
                                             <th>Update</th>
                                             <th>Status</th>
                                         </tr>
@@ -253,14 +254,15 @@ $get_result = mysqli_query($conn, $sql_get_items);
                                         <?php while ($row = mysqli_fetch_assoc($get_result)) { ?>
                                             <tr>
                                                 <td><img src="<?php echo $row['item_img']; ?>" alt="Item Image" style="max-width: 100px;"></td>
-                                                <td><?php echo $row['item'];?></td>
-                                                <td><?php echo "Php " . number_format($row['price'],2);?></td>
-                                                <td><a href="index.php?update_item=<?php echo $row['item_id'];?>" class="btn btn-update">Update</a></td>
+                                                <td><?php echo htmlspecialchars($row['item']); ?></td>
+                                                <td><?php echo "Php " . number_format($row['price'], 2); ?></td>
+                                                <td><?php echo $row['stocks']; ?></td> <!-- Display the stocks -->
+                                                <td><a href="index.php?update_item=<?php echo $row['item_id']; ?>" class="btn btn-update">Update</a></td>
                                                 <td>
-                                                    <?php if($row['item_status'] == 'A'): ?>
-                                                        <a href="index.php?deactivate_item=<?php echo $row['item_id'];?>" class="btn btn-danger">Deactivate</a>
+                                                    <?php if ($row['item_status'] == 'A'): ?>
+                                                        <a href="index.php?deactivate_item=<?php echo $row['item_id']; ?>" class="btn btn-danger">Deactivate</a>
                                                     <?php else: ?>
-                                                        <a href="index.php?deactivate_item=<?php echo $row['item_id'];?>" class="btn btn-success">Activate</a>
+                                                        <a href="index.php?deactivate_item=<?php echo $row['item_id']; ?>" class="btn btn-success">Activate</a>
                                                     <?php endif; ?>
                                                 </td>
                                             </tr>

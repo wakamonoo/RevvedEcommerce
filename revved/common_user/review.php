@@ -126,7 +126,7 @@ if (isset($_POST['submit_review'])) {
             transition: color 0.3s;
         }
         .star.selected {
-            color: #ffc107;
+            color: #f39c12;
         }
 
     </style>
