@@ -1,9 +1,14 @@
 <?php
-include_once "../db.php";
+include "../db.php";
 session_start();
-
+$s_user_id = $_SESSION['user_id'];
 if($_SESSION['user_cat'] != 'U'){
     header("location: ../index.php");
+}
+if(isset($_GET['logout'])){
+    session_destroy();
+    header("location: ../index.php");
+    die();
 }
 
 $user_id = $_SESSION['user_id'];

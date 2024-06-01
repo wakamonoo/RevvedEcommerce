@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2024 at 06:48 PM
+-- Generation Time: Jun 01, 2024 at 05:57 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -58,21 +58,21 @@ INSERT INTO `items` (`item_id`, `item`, `item_img`, `price`, `stocks`, `date_add
 (13, 'MTR Universal Alloy Swing Arm ', '../img/MTR Universal Alloy Swing Arm.jpg', 1949.00, '11', '2024-03-06 08:09:37', 'A', 'Frame and Body Parts'),
 (14, 'Motorcycle Handlebar Retro Black Modified', '../img/Motorcycle Handlebar Retro Black Modified.jpg', 430.00, '7', '2024-03-06 08:09:37', 'A', 'Accessories and Add-ons'),
 (15, 'Racing Boy Alloy Rim 1.2/1.4 X17', '../img/Racing Boy Alloy Rim.jpg', 1500.00, '2', '2024-03-06 08:09:37', 'A', 'Frame and Body Parts'),
-(16, 'Motorcycle LCD Digital Gauge Indicator Speedometer', '../img/Motorcycle LCD Digital Gauge Indicator Speedometer.jpg', 1080.00, '0', '2024-03-06 08:09:37', 'A', 'Performance Parts'),
+(16, 'Motorcycle LCD Digital Gauge Indicator Speedometer', '../img/Motorcycle LCD Digital Gauge Indicator Speedometer.jpg', 1080.00, '100', '2024-03-06 08:09:37', 'A', 'Frame and Body Parts'),
 (17, 'Motorcycle Radiator Grille Guard Protector Cover Motor Bike', '../img/Motorcycle Radiator Grille Guard Protector Cover.jpg', 516.00, '15', '2024-03-06 08:09:37', 'A', 'Engine and Internal Parts'),
 (18, 'MOTORCYCLE STATOR COILS PURE COPPER', '../img/MOTORCYCLE STATOR COILS PURE COPPER.jpg', 250.00, '5', '2024-03-06 08:09:37', 'A', 'Engine and Internal Parts'),
 (19, 'Pipe Cover and Heat Guard ', '../img/Pipe Cover and Heat Guard.jpg', 585.00, '2', '2024-03-06 08:09:37', 'D', 'Frame and Body Parts'),
-(21, 'Motorcycle Exhaust Muffler Akrapovic', '../img/Motorcycle Exhaust Muffler Akrapovic.jpg', 1099.00, '0', '2024-03-06 08:09:37', 'A', 'Performance Parts'),
+(21, 'Motorcycle Exhaust Muffler Akrapovic', '../img/Motorcycle Exhaust Muffler Akrapovic.jpg', 1099.00, '50', '2024-03-06 08:09:37', 'A', 'Frame and Body Parts'),
 (22, ' Rear Bracket Top Box Bracket', '../img/Rear Bracket Top Box Bracket.jpg', 529.00, '6', '2024-03-06 08:09:37', 'A', 'Frame and Body Parts'),
 (23, 'Modified Side Stand Shoes Flat Foot Extension Kickstand Pad', '../img/Modified Side Stand Shoes Flat Foot Extension Kick.jpg', 159.00, '13', '2024-03-06 08:09:37', 'A', 'Frame and Body Parts'),
 (24, 'SC Universal project Tailpipe 51mm Motorcycle', '../img/SC Universal project Tailpipe 51mm Motorcycle.jpg', 749.00, '8', '2024-03-06 08:09:37', 'A', 'Performance Parts'),
 (25, 'Universal Motorcycle Winglet Side Wings Fittings', '../img/663e446145579_Universal Motorcycle Winglet Side Wings Fittings.jpg', 370.00, '7', '2024-03-06 08:09:37', 'A', 'Frame and Body Parts'),
 (45, 'Bride White Leather Seat Cover', '../img/Bride White Leather Seat Cover.jpg', 800.00, '36', '2024-05-11 03:58:19', 'D', 'Frame and Body Parts'),
-(46, 'Frame Honda Msx 125 / Grom 125', '../img/frame-honda-msx-125-grom-125.jpg', 30000.00, '2', '2024-05-11 09:20:53', 'A', 'Frame and Body Parts'),
-(48, 'Motorcycle Bluetooth Helmet Intercom', '../img/Motorcycle Bluetooth Helmet Intercom.png', 2000.00, '9', '2024-05-28 16:24:27', 'A', 'Accessories and Add-ons'),
+(46, 'Frame Honda Msx 125 / Grom 125', '../img/frame-honda-msx-125-grom-125.jpg', 30000.00, '1', '2024-05-11 09:20:53', 'A', 'Frame and Body Parts'),
+(48, 'Motorcycle Bluetooth Helmet Intercom', '../img/Motorcycle Bluetooth Helmet Intercom.png', 2000.00, '8', '2024-05-28 16:24:27', 'A', 'Accessories and Add-ons'),
 (49, 'Airoh Aviatior 2.3', '../img/Airoh Aviator 2.3.jpg', 3000.00, '20', '2024-05-31 13:48:11', 'A', 'Accessories and Add-ons'),
-(50, 'Airoh Movement S Faster Helmet Red Gloss', '../img/Airoh Movement S Faster Helmet Red Gloss.jpg', 11000.00, '10', '2024-05-31 13:51:09', 'A', 'Accessories and Add-ons'),
-(51, 'Fox Titan Sport Jacket Upper Body Armor', '../img/Fox Titan Sport Jacket Upper Body Armor.jpg', 11000.00, '10', '2024-05-31 13:55:15', 'A', 'Accessories and Add-ons'),
+(50, 'Airoh Movement S Faster Helmet Red Gloss', '../img/Airoh Movement S Faster Helmet Red Gloss.jpg', 11000.00, '9', '2024-05-31 13:51:09', 'A', 'Accessories and Add-ons'),
+(51, 'Fox Titan Sport Jacket Upper Body Armor', '../img/Fox Titan Sport Jacket Upper Body Armor.jpg', 11000.00, '9', '2024-05-31 13:55:15', 'A', 'Accessories and Add-ons'),
 (52, 'Troy Lee Knee Pad', '../img/Troy Lee Knee Pad.jpg', 1500.00, '50', '2024-05-31 13:57:50', 'A', 'Accessories and Add-ons'),
 (53, 'AGV Orbyt Helmet', '../img/AGV ORBYT HELMET.jpg', 8500.00, '20', '2024-05-31 16:07:27', 'A', 'Accessories and Add-ons'),
 (54, 'Dainese HGR Gloves EXT', '../img/DAINESE HGR GLOVES EXT.jpg', 800.00, '50', '2024-05-31 16:08:17', 'A', 'Accessories and Add-ons'),
@@ -86,7 +86,7 @@ INSERT INTO `items` (`item_id`, `item`, `item_img`, `price`, `stocks`, `date_add
 (62, 'O\'neal Sniper Elite Gloves', '../img/O_NEAL SNIPER ELITE GLOVES.jpg', 900.00, '40', '2024-05-31 16:18:27', 'A', 'Accessories and Add-ons'),
 (63, 'Oxford Aquatex Cover', '../img/OXFORD AQUATEX COVER.jpg', 1100.00, '150', '2024-05-31 16:19:44', 'A', 'Accessories and Add-ons'),
 (64, 'Putoline Helmet Sanitizer', '../img/PUTOLINE HELMET SANITIZER.jpg', 500.00, '400', '2024-05-31 16:20:35', 'A', 'Accessories and Add-ons'),
-(65, 'SMK Retro Mono Helmet', '../img/SMK RETRO MONO HELMET.jpg', 3000.00, '30', '2024-05-31 16:21:09', 'A', 'Accessories and Add-ons');
+(65, 'SMK Retro Mono Helmet', '../img/SMK RETRO MONO HELMET.jpg', 3000.00, '29', '2024-05-31 16:21:09', 'D', 'Accessories and Add-ons');
 
 -- --------------------------------------------------------
 
@@ -155,13 +155,20 @@ INSERT INTO `order` (`order_id`, `user_id`, `order_phase`, `payment_method`, `or
 (164, 31, 1, 1, '5589HC96', '', '', 2, 'bcvb', 'cvbcv', 'vcbcb', 3055.00, 3055.00, '2024-05-30 02:16:29', '2024-05-30 04:46:16', 15, 1, '5', 'P'),
 (165, 31, 1, 1, 'FWZV2V9N', '', '', 1, 'dsZd', 'sdz c', 'dczc', 579.00, 579.00, '2024-05-30 02:19:19', '2024-05-30 04:46:18', 22, 1, '5', 'P'),
 (166, 31, 1, 1, 'Y7T4AWM7', '', '', 1, 'dfgd', 'dfgdg', 'dfgd', 30050.00, 30050.00, '2024-05-30 03:23:57', '2024-05-30 04:46:14', 46, 1, '5', 'P'),
-(167, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-30 04:44:49', '2024-05-30 04:44:49', 48, 1, '1', 'individual'),
-(168, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-30 04:44:52', '2024-05-30 04:44:52', 46, 1, '1', 'individual'),
+(167, 31, 1, 1, '8E979X2C', 'Jhonmel Christian Bobis', 'Polangui, Albay', 2, 'thfghf', 'fghfh', 'gfhf', 32050.00, 32055.00, '2024-05-30 04:44:49', '2024-06-01 15:15:47', 48, 1, '5', 'P'),
+(168, 31, 1, 1, '8E979X2C', 'Jhonmel Christian Bobis', 'Polangui, Albay', 2, 'thfghf', 'fghfh', 'gfhf', 32050.00, 32055.00, '2024-05-30 04:44:52', '2024-06-01 15:15:47', 46, 1, '5', 'P'),
 (169, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-30 04:44:55', '2024-05-30 04:44:55', 25, 1, '1', 'individual'),
 (170, 31, 1, 1, 'YPH8OOYB', 'Joven Bataller', 'Oas, Albay', 2, 'FDSFSD', 'FSDFS', 'SDFSF', 584.00, 584.00, '2024-05-30 04:44:58', '2024-05-30 04:46:11', 22, 1, '5', 'P'),
-(171, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-31 15:37:33', '2024-05-31 15:37:33', 51, 1, '1', 'individual'),
+(171, 31, 1, 1, 'IFW7QEI6', 'Joven Serdan Bataller', 'Apud, Libon, Albay', 1, 'sdfs', 'fsdfs', 'sdfsf', 22050.00, 22050.00, '2024-05-31 15:37:33', '2024-06-01 15:54:30', 51, 1, '4', 'P'),
 (172, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-31 15:52:43', '2024-05-31 15:52:43', 51, 1, '1', 'individual'),
-(173, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-31 16:47:18', '2024-05-31 16:47:18', 50, 1, '1', 'individual');
+(173, 31, 1, 1, 'IFW7QEI6', 'Joven Serdan Bataller', 'Apud, Libon, Albay', 1, 'sdfs', 'fsdfs', 'sdfsf', 22050.00, 22050.00, '2024-05-31 16:47:18', '2024-06-01 15:54:30', 50, 1, '4', 'P'),
+(174, 31, 1, 1, 'IQE1122R', 'Lee By', 'Oas', 1, 'asda', 'asda', 'asdad', 3050.00, 3050.00, '2024-05-31 18:12:37', '2024-05-31 18:14:15', 65, 1, '5', 'P'),
+(175, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-31 18:13:04', '2024-05-31 18:13:04', 14, 1, '1', 'individual'),
+(176, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-31 18:13:12', '2024-05-31 18:13:12', 15, 1, '1', 'individual'),
+(177, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-31 20:01:13', '2024-05-31 20:01:13', 16, 1, '1', 'individual'),
+(178, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-05-31 20:01:46', '2024-05-31 20:01:46', 57, 1, '1', 'individual'),
+(179, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-06-01 04:04:30', '2024-06-01 04:04:30', 16, 1, '1', 'individual'),
+(180, 31, 1, 0, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.00, '2024-06-01 15:18:38', '2024-06-01 15:18:38', 14, 1, '1', 'individual');
 
 -- --------------------------------------------------------
 
@@ -223,7 +230,10 @@ INSERT INTO `reviews` (`review_id`, `item_id`, `user_id`, `rating`, `review_text
 (37, 15, 31, 5, 'LUPETTTT BOSS SLAMAT', '2024-05-29 22:47:59', '5589HC96', '../uploads/10750114_852410421448029_6857371587595948841_o.jpg'),
 (38, 15, 31, 5, 'LUPETTTT BOSS SLAMAT', '2024-05-29 22:47:59', '5589HC96', '../uploads/10750114_852410421448029_6857371587595948841_o.jpg'),
 (39, 22, 31, 4, 'Lupet', '2024-05-30 06:25:32', 'FWZV2V9N', '../uploads/18118981_1409871832368549_4408487287509565254_n.jpg'),
-(40, 18, 31, 5, 'syempre the best, baka joven yan', '2024-05-31 10:45:54', '6TSADAI1', '../uploads/250082_217083314980746_5776121_n.jpg');
+(40, 18, 31, 5, 'syempre the best, baka joven yan', '2024-05-31 10:45:54', '6TSADAI1', '../uploads/250082_217083314980746_5776121_n.jpg'),
+(41, 65, 31, 5, 'yesssirr', '2024-05-31 12:14:48', 'IQE1122R', '../uploads/33154335_1786240528065009_2300721144749096960_n.jpg'),
+(42, 48, 31, 4, 'GG, nice. salamat boss', '2024-06-01 09:17:09', '8E979X2C', '../uploads/10547881_823746247647780_5972499686276389836_o.jpg'),
+(43, 46, 31, 4, 'GG, nice. salamat boss', '2024-06-01 09:17:09', '8E979X2C', '../uploads/10547881_823746247647780_5972499686276389836_o.jpg');
 
 -- --------------------------------------------------------
 
@@ -355,7 +365,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
 
 --
 -- AUTO_INCREMENT for table `payment_method`
@@ -367,7 +377,7 @@ ALTER TABLE `payment_method`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `review_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `shippers`
