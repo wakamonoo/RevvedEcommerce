@@ -69,7 +69,7 @@ if ($uploadOk == 1) {
             header("Location: registration.php?error=Insert_Failed");
             exit; // Stop script execution
         } else {
-            header("Location: index.php?msg=successfully_registered");
+            header("Location: login.php?msg=successfully_registered");
             exit; // Stop script execution
         }
     } else {
