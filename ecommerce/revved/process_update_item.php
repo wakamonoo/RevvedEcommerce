@@ -59,7 +59,7 @@ if(isset($_POST['u_item_name'], $_POST['u_item_price'], $_POST['u_item_stock'], 
                 
                 if(mysqli_stmt_execute($stmt)) {
                     // Redirect to admin.php with update status
-                    header("location: admin.php?update_status=1");
+                    header("location: admin/index.php?update_status=1");
                     exit();
                 } else {
                     // Display error message
@@ -68,7 +68,7 @@ if(isset($_POST['u_item_name'], $_POST['u_item_price'], $_POST['u_item_stock'], 
             } else {
                 // If file upload failed, redirect to admin.php with an error message
                 echo "File upload failed. Error code: " . $_FILES['u_item_img']['error'] . "<br>";
-                header("location: admin.php?error=file_upload_failed");
+                header("location: admin/index.php?error=file_upload_failed");
                 exit();
             }
         }
