@@ -1,6 +1,8 @@
 <?php
 include "db.php";
 
+$is_logged_in = isset($_SESSION['username']);
+
 // Check if search query is set
 if(isset($_GET['search'])) {
     $search = mysqli_real_escape_string($conn, $_GET['search']);
@@ -830,6 +832,9 @@ body {
                                 <h5 class="card-title"><?php echo htmlspecialchars($row['item']); ?></h5>
                                 <p class="p2">Price: ₱<?php echo $row['price']; ?></p>
                                 <!-- Add to Cart button or any other action -->
+                                <form action="index.php" method="get" class="input-group">
+                                    <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
+                                </form>
                             </div>
                         </div>
                         </div>
@@ -927,7 +932,7 @@ body {
                             <form action="index.php" method="get" class="input-group">
                                 <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
                                 <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
-                                <input type="submit" value="Add to Cart" class="btn btn-primary" id="addToCartBtn">
+                                <input type="submit" value="Add to Cart" class="btn btn-primary addToCartBtn">
                             </form>
                         <?php } ?>
                         <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
@@ -950,8 +955,7 @@ body {
                 <div class="item-container <?php echo mysqli_num_rows($get_result) > 0 ? 'single-item' : ''; ?>">
                     <?php while ($row = mysqli_fetch_assoc($get_result)) { ?>
                     <div class="item <?php echo $row['item_status'] === 'D' ? 'deactivated' : ''; ?>">
-                        <!-- Display all items -->
-                        <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
+                    <img src="<?php echo $row['item_img']; ?>" alt="Item Image" class="photo">
                         <p class="text"><?php echo htmlspecialchars($row['item']); ?></p>
                         <div class="stars">
                             <?php
@@ -969,7 +973,7 @@ body {
                             <form action="index.php" method="get" class="input-group">
                                 <input type="hidden" name="item_id" value="<?php echo $row['item_id']; ?>">
                                 <input type="number" class="form-control" name="cart_qty" min="1" max="<?php echo $row['stocks']; ?>">
-                                <input type="submit" value="Add to Cart" class="btn btn-primary" id="addToCartBtn">
+                                <input type="submit" value="Add to Cart" class="btn btn-primary addToCartBtn">
                             </form>
                         <?php } ?>
                         <p class="stock-info">Stocks: <?php echo $row['stocks']; ?></p>
@@ -995,27 +999,29 @@ body {
                 window.location.href = 'category.php?category=' + encodeURIComponent(categoryName);
             });
         });
-        document.getElementById("addToCartBtn").addEventListener("click", function () {
-            // Check if user is logged in (you would need to replace this condition with your actual login check)
-            var isLoggedIn = false; // Assuming the user is not logged in
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if the user is logged in (this variable is set in the PHP script)
+            var isLoggedIn = <?php echo json_encode($is_logged_in); ?>;
 
-            if (!isLoggedIn) {
-                // Display error message
-                alert("Please login or sign up first.");
-            } else {
-                // Redirect to index.php
-                window.location.href = "index.php";
-            }
-        });
-        document.getElementById("cartLink").addEventListener("click", function (event) {
-            // Check if user is logged in (you would need to replace this condition with your actual login check)
-            var isLoggedIn = false; // Assuming the user is not logged in
+            // Attach event listener to all Add to Cart buttons
+            document.querySelectorAll(".addToCartBtn").forEach(function (button) {
+                button.addEventListener("click", function (event) {
+                    if (!isLoggedIn) {
+                        // Display error message
+                        alert("Please login or sign up first.");
+                        event.preventDefault(); // Prevent the default behavior of the form submission
+                    }
+                });
+            });
 
-            if (!isLoggedIn) {
-                // Display error message
-                alert("Please login or sign up first.");
-                event.preventDefault(); // Prevent the default behavior of the link
-            }
+            // Attach event listener to the cart link
+            document.getElementById("cartLink").addEventListener("click", function (event) {
+                if (!isLoggedIn) {
+                    // Display error message
+                    alert("Please login or sign up first.");
+                    event.preventDefault(); // Prevent the default behavior of the link
+                }
+            });
         });
     </script>
 </body>
