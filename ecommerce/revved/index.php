@@ -6,11 +6,19 @@ $is_logged_in = isset($_SESSION['username']);
 // Check if search query is set
 if(isset($_GET['search'])) {
     $search = mysqli_real_escape_string($conn, $_GET['search']);
+    // Break down the search query into individual terms
+    $terms = explode(" ", $search);
+    $conditions = [];
+    foreach($terms as $term) {
+        $conditions[] = "(items.item LIKE '%$term%' OR items.item_desc LIKE '%$term%')";
+    }
+    // Join the conditions using 'AND' operator
+    $condition_str = implode(" AND ", $conditions);
     // Query to retrieve items with search filter
     $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
                                         FROM items
                                         LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                        WHERE items.stocks > 0 AND items.item LIKE '%$search%'
+                                        WHERE items.stocks > 0 AND $condition_str
                                         GROUP BY items.item_id
                                         ORDER BY items.item_id DESC");
 } else {
@@ -28,6 +36,7 @@ if (!$get_result) {
     echo "Error: " . mysqli_error($conn);
     exit;
 }
+
 $lowest_price_items_query = mysqli_query($conn, "SELECT * FROM items WHERE stocks >= 0 ORDER BY price ASC LIMIT 2");
 
 if (!$lowest_price_items_query) {
@@ -35,6 +44,7 @@ if (!$lowest_price_items_query) {
     echo "Error: " . mysqli_error($conn);
     exit;
 }
+
 $sql = "SELECT items.*, AVG(reviews.rating) AS avg_rating 
         FROM items 
         LEFT JOIN reviews ON items.item_id = reviews.item_id 
@@ -44,6 +54,7 @@ $sql = "SELECT items.*, AVG(reviews.rating) AS avg_rating
         LIMIT 5";
 $buyers_choice_result = mysqli_query($conn, $sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

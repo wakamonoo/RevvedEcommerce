@@ -8,6 +8,7 @@ if(isset($_POST['f_item_name'])){ // Check if form fields are set
     $item_name = mysqli_real_escape_string($conn, $_POST['f_item_name']);
     $item_price = mysqli_real_escape_string($conn, $_POST['f_item_price']);
     $item_stocks = mysqli_real_escape_string($conn, $_POST['f_item_stocks']);
+    $item_desc = mysqli_real_escape_string($conn, $_POST['f_item_desc']);
     $item_category = mysqli_real_escape_string($conn, $_POST['f_item_category']);
     
     // File upload handling
@@ -45,11 +46,11 @@ if(isset($_POST['f_item_name'])){ // Check if form fields are set
     // if everything is ok, try to upload file
     } else {
         if (move_uploaded_file($_FILES["f_item_img"]["tmp_name"], $target_file)) {
-            echo "The file ". htmlspecialchars( basename( $_FILES["f_item_img"]["name"])). " has been uploaded.";
+            echo "The file ". htmlspecialchars(basename($_FILES["f_item_img"]["name"])) . " has been uploaded.";
             
             // File uploaded successfully, now insert data into database
-            $sql_insert_item = "INSERT INTO `items` (`item`, `item_img`, `price`, `stocks`, `category`)  
-                                VALUES ('$item_name', '$target_file', '$item_price', '$item_stocks', '$item_category')";
+            $sql_insert_item = "INSERT INTO `items` (`item`, `item_img`, `price`, `stocks`, `item_desc`, `category`)  
+                                VALUES ('$item_name', '$target_file', '$item_price', '$item_stocks', '$item_desc', '$item_category')";
             
             if (mysqli_query($conn, $sql_insert_item)) {
                 echo "Data inserted successfully.";
@@ -63,7 +64,7 @@ if(isset($_POST['f_item_name'])){ // Check if form fields are set
         }
     }
 } else {
-    header("location: admin??you_cant_be_here");
+    header("location: admin?error=missing_fields");
     exit(); // Ensure script stops execution after redirection
 }
 ?>

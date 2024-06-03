@@ -1,4 +1,3 @@
-
 <?php
 include_once "../db.php";
 session_start();
@@ -23,8 +22,8 @@ if(isset($_POST['f_order_ref_number'])) {
     }
 
     // Check if GCash amount sent is sufficient
-    if($total_amt_to_pay > $gcash_amt_sent){
-        header("location: index.php?msg=Amount is Insufficient.");
+    if($total_amount != $gcash_amt_sent){
+        header("location: cart.php?msg=Amount is Insufficient.");
         exit();
     }
 
@@ -70,4 +69,3 @@ if(isset($_POST['f_order_ref_number'])) {
     }
 }
 ?>
-

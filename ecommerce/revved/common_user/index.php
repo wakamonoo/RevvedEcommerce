@@ -4,18 +4,19 @@ session_start();
 $s_user_id = $_SESSION['user_id'];
 if($_SESSION['user_cat'] != 'U'){
     header("location: ../index.php");
+    exit; // Add exit here to prevent further execution
 }
 if(isset($_GET['logout'])){
     session_destroy();
     header("location: ../index.php");
-    die();
+    exit; // Add exit here to prevent further execution
 }
 
 // Fetch user information including user_img from the database
 $user_query = mysqli_query($conn, "SELECT user_img FROM users WHERE user_id = '$s_user_id'");
 if (!$user_query) {
     // Handle the case where the query fails
-    echo "Error: " . mysqli_error($conn);
+    echo "Error fetching user data: " . mysqli_error($conn);
     exit;
 }
 
@@ -26,23 +27,32 @@ $user_img = $user_data['user_img'];
 $_SESSION['user_img'] = $user_img;
 
 // Check if search query is set
+// Check if search query is set
 if(isset($_GET['search'])) {
     $search = mysqli_real_escape_string($conn, $_GET['search']);
+    // Break down the search query into individual terms
+    $terms = explode(" ", $search);
+    $conditions = [];
+    foreach($terms as $term) {
+        $conditions[] = "(items.item LIKE '%$term%' OR items.item_desc LIKE '%$term%')";
+    }
+    // Join the conditions using 'AND' operator
+    $condition_str = implode(" AND ", $conditions);
     // Query to retrieve items with search filter
     $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
-                                    FROM items
-                                    LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                    WHERE items.stocks > 0 AND items.item LIKE '%$search%'
-                                    GROUP BY items.item_id
-                                    ORDER BY items.item_id DESC");
+                                        FROM items
+                                        LEFT JOIN reviews ON items.item_id = reviews.item_id
+                                        WHERE items.stocks > 0 AND $condition_str
+                                        GROUP BY items.item_id
+                                        ORDER BY items.item_id DESC");
 } else {
     // Query to retrieve all items if no search query is provided
     $get_result = mysqli_query($conn, "SELECT items.*, IFNULL(AVG(reviews.rating), 0) AS avg_rating
-                                    FROM items
-                                    LEFT JOIN reviews ON items.item_id = reviews.item_id
-                                    WHERE items.stocks > 0
-                                    GROUP BY items.item_id
-                                    ORDER BY items.item_id DESC");
+                                        FROM items
+                                        LEFT JOIN reviews ON items.item_id = reviews.item_id
+                                        WHERE items.stocks > 0
+                                        GROUP BY items.item_id
+                                        ORDER BY items.item_id DESC");
 }
 
 if (!$get_result) {
@@ -57,10 +67,9 @@ $cart_count_row = mysqli_fetch_assoc($cart_count_result);
 $cart_count = $cart_count_row['cart_count'];
 
 $lowest_price_items_query = mysqli_query($conn, "SELECT * FROM items WHERE stocks >= 0 ORDER BY price ASC LIMIT 2");
-
 if (!$lowest_price_items_query) {
     // Handle the case where the query fails
-    echo "Error: " . mysqli_error($conn);
+    echo "Error fetching lowest price items: " . mysqli_error($conn);
     exit;
 }
 $sql = "SELECT items.*, AVG(reviews.rating) AS avg_rating 
@@ -71,7 +80,13 @@ $sql = "SELECT items.*, AVG(reviews.rating) AS avg_rating
         HAVING AVG(reviews.rating) = 5
         LIMIT 5";
 $buyers_choice_result = mysqli_query($conn, $sql);
+if (!$buyers_choice_result) {
+    // Handle the case where the query fails
+    echo "Error fetching buyer's choice items: " . mysqli_error($conn);
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

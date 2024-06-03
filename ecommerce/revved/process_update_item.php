@@ -3,13 +3,14 @@
 include_once "db.php";
 
 // Check if the form fields are set
-if(isset($_POST['u_item_name'], $_POST['u_item_price'], $_POST['u_item_stock'], $_POST['u_item_id'], $_POST['u_item_category'])){
+if(isset($_POST['u_item_name'], $_POST['u_item_price'], $_POST['u_item_stock'], $_POST['u_item_desc'], $_POST['u_item_id'], $_POST['u_item_category'])){
     
     // Get the form data
     $item_id = $_POST['u_item_id'];
     $item_name = $_POST['u_item_name'];
     $item_price = $_POST['u_item_price'];
     $item_stock = $_POST['u_item_stock']; // Retrieve the updated stock quantity
+    $item_desc = $_POST['u_item_desc'];
     $item_category = $_POST['u_item_category']; // Retrieve the updated category
 
     // Check if a file was uploaded
@@ -50,12 +51,13 @@ if(isset($_POST['u_item_name'], $_POST['u_item_price'], $_POST['u_item_stock'], 
                                         `item_img` = ?,
                                         `price` = ?,
                                         `stocks` = ?,
+                                        `item_desc` = ?,
                                         `category` = ?
                                     WHERE `item_id` = ?";
 
                 // Prepare and execute the SQL statement
                 $stmt = mysqli_prepare($conn, $sql_update_item);
-                mysqli_stmt_bind_param($stmt, "ssdiss", $item_name, $target_file, $item_price, $item_stock, $item_category, $item_id);
+                mysqli_stmt_bind_param($stmt, "ssdissi", $item_name, $target_file, $item_price, $item_stock, $item_desc, $item_category, $item_id);
                 
                 if(mysqli_stmt_execute($stmt)) {
                     // Redirect to admin.php with update status
@@ -78,12 +80,14 @@ if(isset($_POST['u_item_name'], $_POST['u_item_price'], $_POST['u_item_stock'], 
                             SET `item` = ?,
                                 `price` = ?,
                                 `stocks` = ?,
+                                `item_desc` = ?,
                                 `category` = ?
                             WHERE `item_id` = ?";
 
         // Prepare and execute the SQL statement
         $stmt = mysqli_prepare($conn, $sql_update_item);
-        mysqli_stmt_bind_param($stmt, "sidsi", $item_name, $item_price, $item_stock, $item_category, $item_id);
+        mysqli_stmt_bind_param($stmt, "sidsii", $item_name, $item_price, $item_stock, $item_desc, $item_category, $item_id);
+
         
         if(mysqli_stmt_execute($stmt)) {
             // Redirect to admin.php with update status

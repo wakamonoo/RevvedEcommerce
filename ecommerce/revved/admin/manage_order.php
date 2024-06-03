@@ -59,6 +59,9 @@ if(isset($_POST['finish_order'])){
 }
 
 $status = isset($_GET['status']) ? $_GET['status'] : '';
+
+// Search functionality
+$search_query = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -188,6 +191,18 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
         .col-12{
             margin-top: 20px;
         }
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .search-container .form-control {
+            flex: 1;
+            margin-right: 10px;
+        }
+        .search-container .btn-primary {
+            padding: 10px 20px;
+        }
     </style>
 </head>
 <body>
@@ -201,7 +216,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card">
+            <div class="card">
                     <div class="card-header">
                         <img src="../img/logo.png" alt="revved logo" class="logo">
                         <h3 class="display-3">
@@ -219,17 +234,29 @@ $status = isset($_GET['status']) ? $_GET['status'] : '';
                         </div>
                         </div>
                         <div class="row">
-                            <div class="col-12">
+                        <div class="col-12">
+                            <div class="search-container">
+                                <!-- Search form -->
+                                <form action="manage_order.php" method="GET" class="search-container">
+                                    <input type="text" name="search" placeholder="Search by item name, order ref number or description" class="form-control" value="<?php echo htmlspecialchars($search_query); ?>">
+                                    <input type="hidden" name="status" value="<?php echo $status; ?>">
+                                    <input type="submit" value="Search" class="btn btn-primary">
+                                </form>
+                            </div>
                                 <h4>Order Details:</h4>
                                 <?php
-                                // Fetch orders based on status with item details
+                                // Fetch orders based on status and search query with item details
                                 $sql_orders = "SELECT `order`.*, `items`.`item`, `items`.`item_img`, `shippers`.`shipping_company`, `users`.`fname`, `users`.`address` 
-                                    FROM `order` 
-                                    JOIN `items` ON `order`.`item_id` = `items`.`item_id`
-                                    JOIN `shippers` ON `order`.`shipper_id` = `shippers`.`shipper_id`
-                                    JOIN `users` ON `order`.`user_id` = `users`.`user_id`
-                                    WHERE `order`.`status` = '$status'
-                                    ORDER BY `order`.`order_ref_number`";
+                FROM `order` 
+                JOIN `items` ON `order`.`item_id` = `items`.`item_id`
+                JOIN `shippers` ON `order`.`shipper_id` = `shippers`.`shipper_id`
+                JOIN `users` ON `order`.`user_id` = `users`.`user_id`
+                WHERE `order`.`status` = '$status'
+                AND (`items`.`item` LIKE '%$search_query%'
+                OR `order`.`order_ref_number` LIKE '%$search_query%'
+                OR `items`.`item_desc` LIKE '%$search_query%')
+                ORDER BY `order`.`order_ref_number`";
+
 
                                 $result_orders = mysqli_query($conn, $sql_orders);
 

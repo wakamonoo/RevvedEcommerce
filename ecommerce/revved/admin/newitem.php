@@ -1,3 +1,14 @@
+<?php
+// Define $data_row with default empty values
+$data_row = ['item_desc' => ''];
+
+// Check if $data_row is set and not null before accessing its value
+if(isset($data_row['item_desc'])) {
+    $item_desc_value = $data_row['item_desc'];
+} else {
+    $item_desc_value = ''; // Set a default value if $data_row['item_desc'] is not set or null
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,6 +110,11 @@
                 <!-- Add input field for item stocks -->
                 <label for="f_item_stocks">Item Stocks</label>
                 <input type="text" name="f_item_stocks" id="f_item_stocks" class="form-control mb-3">
+
+                <!-- Input field for description -->
+                <label for="u_item_desc">Description</label>
+                <input value="<?php echo $item_desc_value;?>" type="text" name="f_item_desc" class="form-control mb-3">
+
                 
                 <!-- Dropdown for selecting category -->
                 <label for="f_item_category">Item Category</label>
