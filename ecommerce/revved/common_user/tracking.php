@@ -1,17 +1,41 @@
 <?php
 include "../db.php";
 session_start();
+
 $s_user_id = $_SESSION['user_id'];
-if($_SESSION['user_cat'] != 'U'){
+if ($_SESSION['user_cat'] != 'U') {
     header("location: ../index.php");
 }
-if(isset($_GET['logout'])){
+if (isset($_GET['logout'])) {
     session_destroy();
     header("location: ../index.php");
     die();
 }
 
 $user_id = $_SESSION['user_id'];
+
+// Retrieve the search term if provided
+$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+
+// Prepare the search condition
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$search_condition = '';
+
+if ($search) {
+    // Split the search string into individual terms
+    $terms = explode(' ', $search);
+    $search_conditions = [];
+    
+    // Loop through each term and create a condition for each
+    foreach ($terms as $term) {
+        $term = '%' . $term . '%'; // Prepare the term for the LIKE clause
+        $search_conditions[] = "(o.`order_ref_number` LIKE '$term' OR CONCAT(i.`item`, ' ', i.`item_desc`) LIKE '$term')";
+    }
+    
+    // Combine all the conditions with AND
+    $search_condition = 'AND (' . implode(' AND ', $search_conditions) . ')';
+}
+
 
 // Fetch items with status = 2 (Pending)
 $sql_pending = "SELECT 
@@ -30,29 +54,29 @@ JOIN `items` i ON o.`item_id` = i.`item_id`
 JOIN `users` u ON o.`user_id` = u.`user_id`
 JOIN `payment_method` pm ON o.`payment_method` = pm.`payment_method_id`
 JOIN `shippers` s ON o.`shipper_id` = s.`shipper_id`
-WHERE o.`user_id` = '$user_id' AND o.`status` = 2
+WHERE o.`user_id` = '$user_id' AND o.`status` = 2 $search_condition
 GROUP BY o.`order_ref_number`, pm.`payment_method_desc`, s.`shipping_company`, o.`alternate_receiver`, o.`alternate_address`";
 
 $result_pending = mysqli_query($conn, $sql_pending);
 
 // Fetch items with status = 3 (To Ship)
 $sql_to_ship = "SELECT 
-o.`order_ref_number`, 
-GROUP_CONCAT(i.`item` SEPARATOR ', ') AS `items`, 
-GROUP_CONCAT(i.`item_img` SEPARATOR ', ') AS `item_imgs`, 
-o.`gcash_amount_sent`, 
-CASE WHEN o.`alternate_receiver` IS NOT NULL AND o.`alternate_receiver` != '' THEN '' ELSE u.`fname` END AS `fname`, 
-CASE WHEN o.`alternate_address` IS NOT NULL AND o.`alternate_address` != '' THEN '' ELSE u.`address` END AS `address`,
-pm.`payment_method_desc`,
-s.`shipping_company`,
-o.`alternate_receiver`,
-o.`alternate_address`
+    o.`order_ref_number`, 
+    GROUP_CONCAT(i.`item` SEPARATOR ', ') AS `items`, 
+    GROUP_CONCAT(i.`item_img` SEPARATOR ', ') AS `item_imgs`, 
+    o.`gcash_amount_sent`, 
+    CASE WHEN o.`alternate_receiver` IS NOT NULL AND o.`alternate_receiver` != '' THEN '' ELSE u.`fname` END AS `fname`, 
+    CASE WHEN o.`alternate_address` IS NOT NULL AND o.`alternate_address` != '' THEN '' ELSE u.`address` END AS `address`,
+    pm.`payment_method_desc`,
+    s.`shipping_company`,
+    o.`alternate_receiver`,
+    o.`alternate_address`
 FROM `order` o
 JOIN `items` i ON o.`item_id` = i.`item_id`
 JOIN `users` u ON o.`user_id` = u.`user_id`
 JOIN `payment_method` pm ON o.`payment_method` = pm.`payment_method_id`
 JOIN `shippers` s ON o.`shipper_id` = s.`shipper_id`
-WHERE o.`user_id` = '$user_id' AND o.`status` = 3
+WHERE o.`user_id` = '$user_id' AND o.`status` = 3 $search_condition
 GROUP BY o.`order_ref_number`, pm.`payment_method_desc`, s.`shipping_company`, o.`alternate_receiver`, o.`alternate_address`";
 
 $result_to_ship = mysqli_query($conn, $sql_to_ship);
@@ -74,7 +98,7 @@ JOIN `items` i ON o.`item_id` = i.`item_id`
 JOIN `users` u ON o.`user_id` = u.`user_id`
 JOIN `payment_method` pm ON o.`payment_method` = pm.`payment_method_id`
 JOIN `shippers` s ON o.`shipper_id` = s.`shipper_id`
-WHERE o.`user_id` = '$user_id' AND o.`status` = 4
+WHERE o.`user_id` = '$user_id' AND o.`status` = 4 $search_condition
 GROUP BY o.`order_ref_number`, pm.`payment_method_desc`, s.`shipping_company`, o.`alternate_receiver`, o.`alternate_address`";
 
 $result_shipping = mysqli_query($conn, $sql_shipping);
@@ -87,7 +111,7 @@ $sql_completed = "SELECT
     GROUP_CONCAT(o.`gcash_amount_sent` SEPARATOR ', ') AS `gcash_amount_sent`
 FROM `order` o
 JOIN `items` i ON o.`item_id` = i.`item_id`
-WHERE o.`user_id` = '$user_id' AND o.`status` = 5
+WHERE o.`user_id` = '$user_id' AND o.`status` = 5 $search_condition
 GROUP BY o.`order_ref_number`";
 
 $result_completed = mysqli_query($conn, $sql_completed);
@@ -100,7 +124,7 @@ $sql_cancelled = "SELECT
     GROUP_CONCAT(o.`gcash_amount_sent` SEPARATOR ', ') AS `gcash_amount_sent`
 FROM `order` o
 JOIN `items` i ON o.`item_id` = i.`item_id`
-WHERE o.`user_id` = '$user_id' AND o.`status` = 0
+WHERE o.`user_id` = '$user_id' AND o.`status` = 0 $search_condition
 GROUP BY o.`order_ref_number`";
 
 $result_cancelled = mysqli_query($conn, $sql_cancelled);
@@ -112,11 +136,13 @@ $reviewed_items = [];
 while ($row_review = mysqli_fetch_assoc($result_reviews)) {
     $reviewed_items[] = $row_review['order_ref_number'];
 }
+
 // Query to get the number of items in the cart for the logged-in user
 $cart_count_result = mysqli_query($conn, "SELECT COUNT(*) AS cart_count FROM `order` WHERE status = 1 AND user_id = '$user_id'");
 $cart_count_row = mysqli_fetch_assoc($cart_count_result);
 $cart_count = $cart_count_row['cart_count'];
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -346,6 +372,9 @@ border-right: 2px solid white; / Add vertical line */
   font-family: 'Montserrat', sans-serif; /* Applies a different font to the username */
   margin: 0; /* Removes vertical spacing */
 }
+.white{
+    height: 35px;
+}
 </style>
 
 </head>
@@ -357,7 +386,7 @@ border-right: 2px solid white; / Add vertical line */
     <h3 class="tag">Shop and Rev Up <span class="username"><?php echo $_SESSION['username']; ?></span></h3>
 <div class="search-container">
         <form action="" method="GET" class="search-form">
-            <input type="text" name="search" class="search-input" placeholder="Search...">
+        <input type="text" name="search" class="white"placeholder="Search orders..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
             <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
         </form>
     </div>
@@ -600,5 +629,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
-
 

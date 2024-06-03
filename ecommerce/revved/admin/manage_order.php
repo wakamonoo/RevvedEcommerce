@@ -246,16 +246,25 @@ $search_query = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET[
                                 <h4>Order Details:</h4>
                                 <?php
                                 // Fetch orders based on status and search query with item details
-                                $sql_orders = "SELECT `order`.*, `items`.`item`, `items`.`item_img`, `shippers`.`shipping_company`, `users`.`fname`, `users`.`address` 
-                FROM `order` 
-                JOIN `items` ON `order`.`item_id` = `items`.`item_id`
-                JOIN `shippers` ON `order`.`shipper_id` = `shippers`.`shipper_id`
-                JOIN `users` ON `order`.`user_id` = `users`.`user_id`
-                WHERE `order`.`status` = '$status'
-                AND (`items`.`item` LIKE '%$search_query%'
-                OR `order`.`order_ref_number` LIKE '%$search_query%'
-                OR `items`.`item_desc` LIKE '%$search_query%')
-                ORDER BY `order`.`order_ref_number`";
+                                $search_terms = explode(' ', $search_query);
+                                $search_conditions = [];
+
+                                foreach ($search_terms as $term) {
+                                    $term = mysqli_real_escape_string($conn, $term);  // Escape to prevent SQL injection
+                                    $search_conditions[] = "(`items`.`item` LIKE '%$term%' OR `items`.`item_desc` LIKE '%$term%' OR `order`.`order_ref_number` LIKE '%$term%')";
+                                }
+
+                                $search_conditions_str = implode(' AND ', $search_conditions);
+
+                                $sql_orders = "
+                                SELECT `order`.*, `items`.`item`, `items`.`item_img`, `shippers`.`shipping_company`, `users`.`fname`, `users`.`address`
+                                FROM `order`
+                                JOIN `items` ON `order`.`item_id` = `items`.`item_id`
+                                JOIN `shippers` ON `order`.`shipper_id` = `shippers`.`shipper_id`
+                                JOIN `users` ON `order`.`user_id` = `users`.`user_id`
+                                WHERE `order`.`status` = '$status'
+                                AND ($search_conditions_str)
+                                ORDER BY `order`.`order_ref_number`";
 
 
                                 $result_orders = mysqli_query($conn, $sql_orders);
